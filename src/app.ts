@@ -15,6 +15,8 @@ import { API_PREFIX } from "@constants/index";
 // ─── Route Imports ────────────────────────────────────────────────────────────
 // Add new module routes here as the platform grows
 import authRoutes from "@modules/auth/auth.routes";
+import { publicRoutes } from "@modules/public/public.routes";
+import { adminRoutes } from "@modules/admin/admin.routes";
 
 // =============================================================================
 // Express App Configuration
@@ -120,6 +122,8 @@ app.get("/health", (_req: Request, res: Response) => {
 //   app.use(`${API_PREFIX}/products`, productRoutes);
 //   app.use(`${API_PREFIX}/orders`, orderRoutes);
 app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use(`${API_PREFIX}/public`, publicRoutes);
+app.use(`${API_PREFIX}/admin`, adminRoutes);
 
 // ─── 9. 404 Handler ───────────────────────────────────────────────────────────
 // Catches any request that didn't match a route above.
