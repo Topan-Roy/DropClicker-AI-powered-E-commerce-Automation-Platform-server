@@ -55,3 +55,24 @@ export const getDashboardOverview = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
+
+import User from '../auth/auth.model';
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find({}).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ success: true, message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
