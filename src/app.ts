@@ -19,6 +19,8 @@ import { publicRoutes } from "@modules/public/public.routes";
 import { adminRoutes } from "@modules/admin/admin.routes";
 import { categoryRoutes } from "@modules/category/category.routes";
 import { productRoutes } from "@modules/product/product.routes";
+import { storeRoutes } from "@modules/store/store.routes";
+import { orderRoutes } from "@modules/order/order.routes";
 
 // =============================================================================
 // Express App Configuration
@@ -128,6 +130,8 @@ app.use(`${API_PREFIX}/public`, publicRoutes);
 app.use(`${API_PREFIX}/admin`, adminRoutes);
 app.use(`${API_PREFIX}/categories`, categoryRoutes);
 app.use(`${API_PREFIX}/products`, productRoutes);
+app.use(`${API_PREFIX}/stores`, storeRoutes);
+app.use(`${API_PREFIX}/orders`, orderRoutes);
 
 // ─── 9. 404 Handler ───────────────────────────────────────────────────────────
 // Catches any request that didn't match a route above.
