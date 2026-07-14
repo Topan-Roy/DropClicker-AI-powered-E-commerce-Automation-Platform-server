@@ -7,6 +7,7 @@ import {
   getClearRefreshTokenCookieOptions,
 } from "@utils/tokenHelper";
 import { COOKIE_NAMES, HTTP_STATUS } from "@constants/index";
+import authRepository from "@modules/auth/auth.repository";
 import type {
   RegisterInput,
   LoginInput,
@@ -264,6 +265,29 @@ const authController = {
     const result = await authService.getMe(userId);
 
     new ApiResponse(HTTP_STATUS.OK, result, "User profile retrieved").send(res);
+  },
+
+  // ─── PATCH /auth/update-profile ────────────────────────────────────────────
+
+  /**
+   * Update authenticated user's profile (name + avatar URL).
+   * Only allows updating safe fields — not role, status, or password.
+   */
+  async updateProfile(req: Request, res: Response): Promise<void> {
+    const userId = req.user!.userId;
+    const { name, avatar } = req.body;
+
+    const allowedUpdates: Record<string, unknown> = {};
+    if (name) allowedUpdates.name = name;
+    if (avatar !== undefined) allowedUpdates.avatar = avatar;
+
+    const updatedUser = await authRepository.updateById(userId, allowedUpdates as any);
+
+    if (!updatedUser) {
+      throw ApiError.notFound("User not found");
+    }
+
+    new ApiResponse(HTTP_STATUS.OK, { user: updatedUser }, "Profile updated successfully").send(res);
   },
 };
 

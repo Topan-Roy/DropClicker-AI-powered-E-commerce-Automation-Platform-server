@@ -149,4 +149,14 @@ router.patch(
   asyncHandler(authController.changePassword)
 );
 
+/**
+ * PATCH /api/v1/auth/update-profile
+ * Update authenticated user's name and avatar URL.
+ */
+router.patch(
+  "/update-profile",
+  authenticate,
+  asyncHandler(authController.updateProfile)
+);
+
 export default router;
