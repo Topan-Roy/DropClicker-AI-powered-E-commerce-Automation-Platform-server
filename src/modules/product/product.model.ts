@@ -43,11 +43,10 @@ const productSchema = new Schema<IProductDocument>(
   { timestamps: true, versionKey: false }
 );
 
-productSchema.pre("save", function (next) {
+productSchema.pre("save", async function () {
   if (this.isModified("title")) {
     this.slug = this.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "") + "-" + Date.now().toString().slice(-4);
   }
-  next();
 });
 
 productSchema.index({ slug: 1 });
