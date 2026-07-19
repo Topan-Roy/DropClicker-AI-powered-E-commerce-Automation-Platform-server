@@ -134,14 +134,13 @@ const userSchema = new Schema<IUserDocument>(
 // =============================================================================
 
 // Compound index for token lookups (verify email, reset password)
-// TTL index automatically deletes expired verification tokens from the DB
 userSchema.index(
   { emailVerificationExpiry: 1 },
-  { expireAfterSeconds: 0, sparse: true }
+  { sparse: true }
 );
 userSchema.index(
   { passwordResetExpiry: 1 },
-  { expireAfterSeconds: 0, sparse: true }
+  { sparse: true }
 );
 
 // =============================================================================
