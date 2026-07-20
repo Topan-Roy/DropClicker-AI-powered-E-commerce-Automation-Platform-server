@@ -94,3 +94,41 @@ export const authorize = (...allowedRoles: TUserRole[]) => {
     next();
   };
 };
+
+/**
+ * Optional Authentication Middleware — `optionalAuthenticate`
+ *
+ * Verifies the JWT access token from the Authorization header if present.
+ * Sets req.user with the decoded payload if valid.
+ * Does NOT throw an error if the token is missing or invalid.
+ */
+export const optionalAuthenticate = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+): void => {
+  try {
+    let token: string | undefined;
+
+    // 1. Try Authorization header first (Bearer token)
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
+
+    // 2. Fall back to cookie
+    if (!token && req.cookies?.accessToken) {
+      token = req.cookies.accessToken as string;
+    }
+
+    if (token) {
+      const decoded = verifyAccessToken(token);
+      req.user = decoded;
+    }
+
+    next();
+  } catch (error) {
+    // If token is invalid/expired, ignore and proceed as unauthenticated
+    next();
+  }
+};
